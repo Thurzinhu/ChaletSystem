@@ -1,11 +1,15 @@
-package br.com.chaletmanagement.context;
+package br.com.chaletmanagement.context.DAOImplementation;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.chaletmanagement.context.ConnectionFactory;
+import br.com.chaletmanagement.context.DAO.ChaletDAO;
 import br.com.chaletmanagement.model.Chalet;
 
 public class ChaletDAOImplementation implements ChaletDAO

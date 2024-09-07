@@ -1,4 +1,4 @@
-package br.com.chaletmanagement.context;
+package br.com.chaletmanagement.context.DAO;
 
 import java.util.List;
 import br.com.chaletmanagement.model.Client;

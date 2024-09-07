@@ -1,15 +1,17 @@
 package br.com.chaletmanagement.view;
 
 import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import java.awt.Color;
 import javax.swing.SwingConstants;
-import java.awt.Font;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -42,75 +44,103 @@ public class FrmMain extends JFrame {
      * Create the frame.
      */
     public FrmMain() {
+        setTitle("Chalet Management System");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 1227, 557);
+        setBounds(100, 100, 1000, 600);
         
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         
-        JMenu mnClientManagement = new JMenu("Client Management");
-        menuBar.add(mnClientManagement);
+        JMenu mnHelp = new JMenu("Help");
+        mnHelp.setFont(new Font("Arial", Font.BOLD, 14));
+        menuBar.add(mnHelp);
         
-        JMenuItem mntmAddClient = new JMenuItem("Add Client");
-        mntmAddClient.addActionListener(new ActionListener() {
+        JMenuItem mntmAbout = new JMenuItem("About");
+        mntmAbout.setIcon(new ImageIcon(FrmMain.class.getResource("../resources/icons/about.png")));  
+        mntmAbout.setFont(new Font("Arial", Font.PLAIN, 12));
+        mnHelp.add(mntmAbout);
+        
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        contentPane.setBackground(new Color(245, 245, 245)); 
+        setContentPane(contentPane);
+        
+        JLabel lblChaletManagement = new JLabel("Chalet Heaven");
+        lblChaletManagement.setFont(new Font("Harrington", Font.BOLD, 45));
+        lblChaletManagement.setHorizontalAlignment(SwingConstants.CENTER);
+        lblChaletManagement.setForeground(new Color(28, 113, 216));
+        
+        JButton btnManageClients = new JButton("Manage Clients");
+        btnManageClients.setIcon(new ImageIcon(FrmMain.class.getResource("../resources/icons/manage-client.png"))); 
+        btnManageClients.setFont(new Font("Arial", Font.PLAIN, 14));
+        btnManageClients.setBackground(new Color(173, 216, 230));
+        btnManageClients.setForeground(Color.BLACK);
+        btnManageClients.setFocusPainted(false);
+        btnManageClients.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 FrmClient addClientFrame = new FrmClient();
                 addClientFrame.setLocationRelativeTo(null);
                 addClientFrame.setVisible(true);
             }
         });
-        mnClientManagement.add(mntmAddClient);
         
-        JMenuItem mntmExit = new JMenuItem("Exit");
-        mntmExit.addActionListener(new ActionListener() {
+        JButton btnManageChalets = new JButton("Manage Chalets");
+        btnManageChalets.setIcon(new ImageIcon(FrmMain.class.getResource("../resources/icons/manage-chalet.png")));
+        btnManageChalets.setFont(new Font("Arial", Font.PLAIN, 14));
+        btnManageChalets.setBackground(new Color(144, 238, 144));
+        btnManageChalets.setForeground(Color.BLACK);
+        btnManageChalets.setFocusPainted(false);
+        btnManageChalets.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                FrmChalet manageChaletFrame = new FrmChalet();
+                manageChaletFrame.setLocationRelativeTo(null);
+                manageChaletFrame.setVisible(true);
             }
         });
-        mnClientManagement.add(mntmExit);
-
-        JMenu mnchaletManagement = new JMenu("Chalet Management");
-        menuBar.add(mnchaletManagement);
         
-        JMenuItem mntmManagechalet = new JMenuItem("Manage chalet");
-        mntmManagechalet.addActionListener(new ActionListener() {
+        JButton btnManageBookings = new JButton("Manage Bookings");
+        btnManageBookings.setIcon(new ImageIcon(FrmMain.class.getResource("../resources/icons/manage-booking.png")));
+        btnManageBookings.setFont(new Font("Arial", Font.PLAIN, 14));
+        btnManageBookings.setBackground(new Color(255, 182, 193));
+        btnManageBookings.setForeground(Color.BLACK);
+        btnManageBookings.setFocusPainted(false);
+        btnManageBookings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                FrmChalet managechaletFrame = new FrmChalet();
-                managechaletFrame.setLocationRelativeTo(null);
-                managechaletFrame.setVisible(true);
+                FrmBooking manageBookingFrame = new FrmBooking();
+                manageBookingFrame.setLocationRelativeTo(null);
+                manageBookingFrame.setVisible(true);
             }
         });
-        mnchaletManagement.add(mntmManagechalet);
         
-        JMenu mnHelp = new JMenu("Help");
-        menuBar.add(mnHelp);
-        
-        JMenuItem mntmAbout = new JMenuItem("About");
-        mnHelp.add(mntmAbout);
-        
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        
-        JLabel lblchaletManagement = new JLabel("chalet Management System");
-        lblchaletManagement.setFont(new Font("Dialog", Font.BOLD, 26));
-        lblchaletManagement.setHorizontalAlignment(SwingConstants.CENTER);
-        lblchaletManagement.setForeground(new Color(28, 113, 216));
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
         gl_contentPane.setHorizontalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addGap(447)
-                    .addComponent(lblchaletManagement)
-                    .addContainerGap(564, Short.MAX_VALUE))
+        	gl_contentPane.createParallelGroup(Alignment.CENTER)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGap(48)
+        					.addComponent(btnManageClients, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+        					.addGap(56)
+        					.addComponent(btnManageChalets, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+        					.addGap(56)
+        					.addComponent(btnManageBookings, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addContainerGap()
+        					.addComponent(lblChaletManagement, GroupLayout.DEFAULT_SIZE, 970, Short.MAX_VALUE)))
+        			.addContainerGap())
         );
         gl_contentPane.setVerticalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addGap(181)
-                    .addComponent(lblchaletManagement)
-                    .addContainerGap(223, Short.MAX_VALUE))
+        	gl_contentPane.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addGap(115)
+        			.addComponent(lblChaletManagement)
+        			.addGap(63)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(btnManageClients, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(btnManageChalets, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(btnManageBookings, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
+        			.addContainerGap(249, Short.MAX_VALUE))
         );
         contentPane.setLayout(gl_contentPane);
     }

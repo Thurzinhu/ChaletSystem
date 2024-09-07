@@ -2,39 +2,41 @@ package br.com.chaletmanagement.controller;
 
 import java.util.List;
 
-import br.com.chaletmanagement.context.ChaletDAO;
-import br.com.chaletmanagement.context.ChaletDAOImplementation;
+import br.com.chaletmanagement.context.DAO.ChaletDAO;
+import br.com.chaletmanagement.context.DAOImplementation.ChaletDAOImplementation;
 import br.com.chaletmanagement.model.Chalet;
 
 public class ChaletController
 {
+    private ChaletDAO chaletDAO;
+
+    public ChaletController()
+    {
+        chaletDAO = new ChaletDAOImplementation();
+    }
+
     public String addChalet(Chalet chalet)
     {
-        ChaletDAO dao = new ChaletDAOImplementation();
-        return dao.addChalet(chalet);
+        return chaletDAO.addChalet(chalet);
     }
     
     public String updateChalet(Chalet chalet)
     {
-        ChaletDAO dao = new ChaletDAOImplementation();
-        return dao.updateChalet(chalet);
+        return chaletDAO.updateChalet(chalet);
     }
 
     public String deleteChalet(Chalet chalet)
     {
-        ChaletDAO dao = new ChaletDAOImplementation();
-        return dao.deleteChalet(chalet);
+        return chaletDAO.deleteChalet(chalet);
     }
 
     public List<Chalet> getAllChalets()
     {
-        ChaletDAO dao = new ChaletDAOImplementation();
-        return dao.getAllChalets();
+        return chaletDAO.getAllChalets();
     }
 
     public Chalet searchById(String id)
     {
-        ChaletDAO dao = new ChaletDAOImplementation();
-        return dao.searchById(id);
+        return chaletDAO.searchById(id);
     }
 }

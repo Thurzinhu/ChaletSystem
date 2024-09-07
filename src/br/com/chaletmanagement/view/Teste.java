@@ -1,5 +1,6 @@
 package br.com.chaletmanagement.view;
 import java.sql.Connection;
+import java.time.LocalDate;
 
 import br.com.chaletmanagement.context.ConnectionFactory;
 import br.com.chaletmanagement.model.*;
@@ -10,22 +11,24 @@ public class Teste
 	public static void main(String[] args)
 	{
 		Connection con = ConnectionFactory.getConnection();
-		//ClientController controller = new ClientController();
-		ChaletController c = new ChaletController();
-		Chalet h = new Chalet();
-		h.setCapacity(12);
-		h.setChaletCode("AABB");
-		h.setLocation("SP-BU");
-		h.setNormalPrice(123.00);
-		h.setPeakSeasonPrice(200.00);
-		
-		System.out.println(c.updateChalet(h));
-		
-		for (Chalet ho : c.getAllChalets())
+		BookingController bc = new BookingController();
+		Booking b = new Booking();
+		b.setChaletId(1);
+		b.setClientId(1);
+		b.setCheckInDate(LocalDate.now());
+		b.setCheckOutDate(LocalDate.now().plusDays(7));
+		b.setDiscount(12.00);
+		b.setNumberGuests(2);
+		b.setStatus("Reserved");
+		b.setTotalPrice(600.0);
+
+		System.out.println(bc.addBooking(b));
+		for (Booking bo : bc.getAllBookings())
 		{
-			System.out.println(ho.getChaletCode());
+			System.out.println(bo.getNumberGuests());
 		}
-		// System.out.println(c.deleteChalet(h));
+		
+
 		if(con != null)
 		{
 			System.out.println("Closing Connection");

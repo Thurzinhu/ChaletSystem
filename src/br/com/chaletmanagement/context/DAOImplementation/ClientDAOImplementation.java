@@ -1,12 +1,16 @@
-package br.com.chaletmanagement.context;
+package br.com.chaletmanagement.context.DAOImplementation;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.chaletmanagement.context.ConnectionFactory;
+import br.com.chaletmanagement.context.DAO.ClientDAO;
 import br.com.chaletmanagement.model.Client;
 
 public class ClientDAOImplementation implements ClientDAO
@@ -38,6 +42,7 @@ public class ClientDAOImplementation implements ClientDAO
 			ConnectionFactory.closeConnection(dbConnection);
 		}
 	}
+
 
 	@Override
 	public String updateClient(Client client)
@@ -130,6 +135,7 @@ public class ClientDAOImplementation implements ClientDAO
 	private Client mapResultSetToClient(ResultSet s) throws SQLException
 	{
 		Client client = new Client();
+		client.setClientId(s.getInt("client_id"));
         client.setId(s.getString("id"));
         client.setName(s.getString("name"));
         client.setBirthday(s.getObject("birthday", LocalDate.class));
@@ -153,6 +159,7 @@ public class ClientDAOImplementation implements ClientDAO
 		}
 		catch (SQLException e)
 		{
+			
 		}
 		finally
 		{

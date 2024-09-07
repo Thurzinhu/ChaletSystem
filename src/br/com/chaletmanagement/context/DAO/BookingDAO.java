@@ -1,4 +1,4 @@
-package br.com.chaletmanagement.context;
+package br.com.chaletmanagement.context.DAO;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ public interface BookingDAO
 	String updateBooking(Booking booking);
 	String deleteBooking(Booking booking);
 	List<Booking> getAllBookings();
-	Booking searchById(String id);
+	Booking searchById(Integer id);
 }

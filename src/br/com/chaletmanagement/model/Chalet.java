@@ -2,15 +2,16 @@ package br.com.chaletmanagement.model;
 
 public class Chalet
 {
+    private Integer chaletId;
+    private String chaletCode;
     private String location;
     private int capacity;
     private Double peakSeasonPrice;
     private Double normalPrice;
-    private String chaletCode;
 
-	public Chalet()
+    public Integer getChaletId()
     {
-    	
+        return chaletId;
     }
 
     public String getLocation()

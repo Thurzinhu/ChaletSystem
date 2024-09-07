@@ -4,21 +4,39 @@ import java.time.LocalDate;
 
 public class Booking
 {
-    private Integer chaletCode;
+    private Integer bookingId;
+    private Integer chaletId;
+    private Integer clientId;
     private String status;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private Integer numberGuests;
     private Double discount;
     private Double totalPrice;
-	
-    public Integer getChaletCode() 
+
+    public Integer getBookingId()
     {
-		return chaletCode;
+        return bookingId;
+    }
+	
+    public Integer getChaletId() 
+    {
+		    return chaletId;
+	  }
+	
+    public void setChaletId(Integer chaletId)
+    {
+		this.chaletId = chaletId;
+	}
+
+    public Integer getClientId() 
+    {
+		return clientId;
 	}
 	
-    public void setChaletCode(Integer chaletCode) {
-		this.chaletCode = chaletCode;
+    public void setClientId(Integer clientId)
+    {
+		this.clientId = clientId;
 	}
 	
     public String getStatus() 
@@ -56,7 +74,8 @@ public class Booking
 		return numberGuests;
 	}
     
-	public void setNumberGuests(Integer numberGuests) {
+	public void setNumberGuests(Integer numberGuests)
+    {
 		this.numberGuests = numberGuests;
 	}
 	
@@ -71,12 +90,12 @@ public class Booking
 	}
 
 	public Double getTotalPrice()
-    {
+  {
 		return totalPrice;
 	}
 
 	public void setTotalPrice(Double totalPrice)
-    {
+  {
 		this.totalPrice = totalPrice;
 	}
 }

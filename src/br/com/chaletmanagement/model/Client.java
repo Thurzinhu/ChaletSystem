@@ -4,13 +4,19 @@ import java.time.LocalDate;
 
 public class Client
 {
+	private Integer clientId;
 	private String name;
 	private String id;
 	private LocalDate birthday;
 	
-	public Client()
+	public void setClientId(Integer clientId)
 	{
-		
+		this.clientId = clientId;
+	}
+	
+	public Integer getClientId()
+	{
+		return clientId;
 	}
 	
 	public String getName()
