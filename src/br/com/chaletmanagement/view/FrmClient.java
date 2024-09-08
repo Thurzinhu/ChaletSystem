@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -25,6 +27,7 @@ import br.com.chaletmanagement.model.Address;
 import br.com.chaletmanagement.util.Util;
 import br.com.chaletmanagement.controller.ClientController;
 import br.com.chaletmanagement.model.Client;
+import br.com.chaletmanagement.model.Phone;
 
 public class FrmClient extends JFrame {
 
@@ -39,6 +42,8 @@ public class FrmClient extends JFrame {
     private JTextField txtCity;
     private JTextField txtState;
     private JTextField txtPostalCode;
+    private JTextField txtPhoneType;
+    private JTextField txtPhoneNumber;
     private JLabel lblMessage;
 
     public FrmClient() {
@@ -66,9 +71,9 @@ public class FrmClient extends JFrame {
         tblClient = new JTable();
         tblClient.setModel(new DefaultTableModel(
             new Object[][] {},
-            new String[] { "ID", "Name", "Birthday", "Address", "Neighborhood", "City", "State", "Postal Code" }
+            new String[] { "ID", "Name", "Birthday", "Address", "Neighborhood", "City", "State", "Postal Code", "Phone Number" }
         ) {
-            Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class };
+            Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class };
 
             @Override
             public Class getColumnClass(int columnIndex) {
@@ -109,12 +114,14 @@ public class FrmClient extends JFrame {
             {
                 Client client;
                 Address address;
+                Phone phone;
                 ClientController cc = new ClientController();
                 try
                 {
                     client = mapFieldsToClient();
                     address = mapFieldsToAddress();
-                    lblMessage.setText("Message: " + cc.addClient(client, address));
+                    phone = mapFieldsToPhone();
+                    lblMessage.setText("Message: " + cc.addClient(client, address, phone));
                 } 
                 catch (Exception ex)
                 {
@@ -132,12 +139,14 @@ public class FrmClient extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 Client client;
                 Address address;
+                Phone phone;
                 ClientController cc = new ClientController();
                 try 
                 {
                     client = mapFieldsToClient();
                     address = mapFieldsToAddress();
-                    lblMessage.setText("Message: " + cc.updateClient(client, address));
+                    phone = mapFieldsToPhone();
+                    lblMessage.setText("Message: " + cc.updateClient(client, address, phone));
                 } 
                 catch (Exception ex) 
                 {
@@ -189,6 +198,8 @@ public class FrmClient extends JFrame {
                 txtCity.setText("");
                 txtState.setText("");
                 txtPostalCode.setText("");
+                txtPhoneType.setText("");
+                txtPhoneNumber.setText("");
                 DefaultTableModel tbm = (DefaultTableModel) tblClient.getModel();
                 tbm.setRowCount(0);
             }
@@ -293,6 +304,18 @@ public class FrmClient extends JFrame {
 
         txtPostalCode = new JTextField();
         txtPostalCode.setColumns(10);
+        
+        JLabel lblPhoneType = new JLabel("Phone Type");
+        lblPhoneType.setFont(new Font("Arial", Font.BOLD, 14));
+        
+        txtPhoneType = new JTextField();
+        txtPhoneType.setColumns(10);
+        
+        JLabel lblPhoneNumber = new JLabel("Phone Number");
+        lblPhoneNumber.setFont(new Font("Arial", Font.BOLD, 14));
+        
+        txtPhoneNumber = new JTextField();
+        txtPhoneNumber.setColumns(10);
 
         lblMessage = new JLabel("Message: ");
         lblMessage.setFont(new Font("Arial", Font.BOLD, 14));
@@ -313,7 +336,9 @@ public class FrmClient extends JFrame {
                                 .addComponent(lblNeighborhood)
                                 .addComponent(lblCity)
                                 .addComponent(lblState)
-                                .addComponent(lblPostalCode))
+                                .addComponent(lblPostalCode)
+                                .addComponent(lblPhoneType)
+                                .addComponent(lblPhoneNumber))
                             .addGap(18)
                             .addGroup(gl_panelForm.createParallelGroup(Alignment.LEADING)
                                 .addComponent(txtRG)
@@ -323,48 +348,58 @@ public class FrmClient extends JFrame {
                                 .addComponent(txtNeighborhood)
                                 .addComponent(txtCity)
                                 .addComponent(txtState)
-                                .addComponent(txtPostalCode)))
+                                .addComponent(txtPostalCode)
+                                .addComponent(txtPhoneType)
+                                .addComponent(txtPhoneNumber)))
                         .addComponent(lblMessage))
                     .addContainerGap())
         );
         gl_panelForm.setVerticalGroup(
-            gl_panelForm.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_panelForm.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblID)
-                        .addComponent(txtRG, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblName)
-                        .addComponent(txtName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblBirthday)
-                        .addComponent(txtBirthday, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblAddress)
-                        .addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblNeighborhood)
-                        .addComponent(txtNeighborhood, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblCity)
-                        .addComponent(txtCity, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblState)
-                        .addComponent(txtState, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblPostalCode)
-                        .addComponent(txtPostalCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addComponent(lblMessage)
-                    .addContainerGap())
+	    gl_panelForm.createParallelGroup(Alignment.LEADING)
+	        .addGroup(gl_panelForm.createSequentialGroup()
+	            .addContainerGap()
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblID)
+	                .addComponent(txtRG, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblName)
+	                .addComponent(txtName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblBirthday)
+	                .addComponent(txtBirthday, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblAddress)
+	                .addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblNeighborhood)
+	                .addComponent(txtNeighborhood, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblCity)
+	                .addComponent(txtCity, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblState)
+	                .addComponent(txtState, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblPostalCode)
+	                .addComponent(txtPostalCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblPhoneType)
+	                .addComponent(txtPhoneType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
+	                .addComponent(lblPhoneNumber)
+	                .addComponent(txtPhoneNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	            .addPreferredGap(ComponentPlacement.RELATED)
+	            .addComponent(lblMessage)
+	            .addContainerGap())
         );
         panelForm.setLayout(gl_panelForm);
 
@@ -403,17 +438,19 @@ public class FrmClient extends JFrame {
         for (Client client : clients) 
         {
             Address address = cc.getAddressByClientId(client);
-            if (address != null)
+            Phone phone = cc.getPhoneByClientId(client);
+            if (address != null && phone != null)
             {
                 tbm.addRow(new Object[] {
                     client.getRG(),
                     client.getName(),
-                    client.getBirthday().toString(),
+                    Util.formatDateToDDMMYYYY(client.getBirthday()),
                     address.getAddress(),
                     address.getNeighborhood(),
                     address.getCity(),
                     address.getState(),
-                    address.getPostalCode()
+                    address.getPostalCode(),
+                    phone.getPhoneNumber()
                 });
             } 
             else 
@@ -423,7 +460,7 @@ public class FrmClient extends JFrame {
                     client.getRG(),
                     client.getName(),
                     client.getBirthday().toString(),
-                    "", "", "", "", ""
+                    "", "", "", "", "", ""
                 });
             }
         }
@@ -434,7 +471,15 @@ public class FrmClient extends JFrame {
         int selectedRow = tblClient.getSelectedRow();
         txtRG.setText(tblClient.getValueAt(selectedRow, 0).toString());
         txtName.setText(tblClient.getValueAt(selectedRow, 1).toString());
-        txtBirthday.setText(tblClient.getValueAt(selectedRow, 2).toString());
+        try 
+        {
+            LocalDate birthday = Util.mapGUIDateToLocalDate(tblClient.getValueAt(selectedRow, 2).toString());
+            txtBirthday.setText(Util.formatDateToDDMMYYYY(birthday));
+        } 
+        catch (Exception e)
+        {
+            txtBirthday.setText("");
+        }
         txtAddress.setText(tblClient.getValueAt(selectedRow, 3).toString());
         if (tblClient.getValueAt(selectedRow, 4) != null)
         	txtNeighborhood.setText(tblClient.getValueAt(selectedRow, 4).toString());
@@ -442,6 +487,7 @@ public class FrmClient extends JFrame {
         txtState.setText(tblClient.getValueAt(selectedRow, 6).toString());
         if (tblClient.getValueAt(selectedRow, 7) != null)
         	txtPostalCode.setText(tblClient.getValueAt(selectedRow, 7).toString());
+        txtPhoneNumber.setText(tblClient.getValueAt(selectedRow, 8).toString());
     }
 
     private Client mapFieldsToClient() throws Exception 
@@ -462,5 +508,13 @@ public class FrmClient extends JFrame {
         address.setState(Util.validateAndGetString(txtState.getText().trim(), "State"));
         //address.setPostalCode(Util.validateAndGetString(txtPostalCode.getText().trim(), "Postal Code"));
         return address;
+    }
+    
+    private Phone mapFieldsToPhone() throws Exception 
+    {
+        Phone phone = new Phone();
+        // phone.setPhoneType(Util.validateAndGetString(txtPhoneType.getText().trim(), "Phone Type"));
+        phone.setPhoneNumber(Util.validateAndGetString(txtPhoneNumber.getText().trim(), "Phone Number"));
+        return phone;
     }
 }

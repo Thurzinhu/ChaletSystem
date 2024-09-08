@@ -1,18 +1,26 @@
 package br.com.chaletmanagement.util;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Util
 {
-	public static int[] mapGUIDateToLocalDate(String dataGui) throws Exception
+
+	public static LocalDate mapGUIDateToLocalDate(String dataGui) throws Exception 
 	{
-		int[] dataFormatada = new int[3];
-		if (dataGui.length() != 10)
-			throw new Exception("Invalid Date");
-		dataFormatada[0] = Integer.parseInt(dataGui.substring(0, 2));
-		dataFormatada[1] = Integer.parseInt(dataGui.substring(3, 5));
-		dataFormatada[2] = Integer.parseInt(dataGui.substring(6, 10));
-		return dataFormatada;
+	    if (dataGui.length() != 10) {
+	        throw new Exception("Invalid Date");
+	    }
+	    int day = Integer.parseInt(dataGui.substring(0, 2));
+	    int month = Integer.parseInt(dataGui.substring(3, 5));
+	    int year = Integer.parseInt(dataGui.substring(6, 10));
+	    return LocalDate.of(year, month, day);
+	}
+	
+	public static String formatDateToDDMMYYYY(LocalDate date)
+	{
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	    return date.format(formatter);
 	}
 
 	public static String mapLocalDateToGUIDate(LocalDate dataLocalDate)
@@ -47,33 +55,33 @@ public class Util
         return value;
     }
 
-	public static LocalDate validateAndGetDate(String dateStr, String fieldName) throws Exception 
+	public static LocalDate validateAndGetDate(String dateStr, String fieldName) throws Exception
     {
-        int[] formattedDate;
+        LocalDate date;
         try 
         {
-            formattedDate = Util.mapGUIDateToLocalDate(dateStr);
-            if (formattedDate.length != 3) 
-            {
-                throw new Exception("Invalid " + fieldName + " format. Please use DD-MM-YYYY.");
-            }
+            date = Util.mapGUIDateToLocalDate(dateStr);
         } 
-        catch (NumberFormatException | ArrayIndexOutOfBoundsException e) 
+        catch (NumberFormatException e) 
         {
-            throw new Exception("Invalid date format. Please use DD-MM-YYYY.");
+            throw new Exception("Invalid date format for " + fieldName + ". Please use DD-MM-YYYY.");
         }
 
-        if (formattedDate[1] < 1 || formattedDate[1] > 12) 
+        int day = date.getDayOfMonth();
+        int month = date.getMonthValue();
+
+        if (month < 1 || month > 12)
         {
             throw new Exception("Invalid month in " + fieldName + ". Must be between 1 and 12.");
         }
-        if (formattedDate[0] < 1 || formattedDate[0] > 31) 
-        {
+        if (day < 1 || day > 31)
+        { 
             throw new Exception("Invalid day in " + fieldName + ". Must be between 1 and 31.");
         }
 
-        return LocalDate.of(formattedDate[2], formattedDate[1], formattedDate[0]);
+        return date;
     }
+
 
 	public static Integer validateAndGetInteger(String value, String fieldName) throws Exception 
     {

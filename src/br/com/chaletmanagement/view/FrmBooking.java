@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.time.LocalDate;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -145,13 +146,28 @@ public class FrmBooking extends JFrame
         btnDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Booking booking = new Booking();
                 BookingController bc = new BookingController();
-                booking.setChaletId(Integer.parseInt(txtChaletCode.getText()));
+                Booking booking;
+                try
+                {
+                	booking = setBookingToBeDeleted();
+                }
+                catch(Exception ex)
+                {
+                	lblMessage.setText("Message: " + ex.getMessage());
+                	return;
+                }
                 int i = JOptionPane.showConfirmDialog(null, "Do you want to delete this booking for Chalet ID: " + txtChaletCode.getText() + "?",
                         "Delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (JOptionPane.YES_OPTION == i) {
-                    lblMessage.setText("Message: " + bc.deleteBooking(booking));
+                	try
+                	{
+                		lblMessage.setText("Message: " + bc.deleteBooking(booking));                		
+                	}
+                	catch (Exception ex)
+                	{
+                		lblMessage.setText("Message: Could Not Delete Booking");                		
+                	}
                     searchBooking();
                 }
             }
@@ -361,11 +377,51 @@ public class FrmBooking extends JFrame
         txtChaletCode.setText(tblBooking.getValueAt(selectedRow, 0).toString());
         txtClientRG.setText(tblBooking.getValueAt(selectedRow, 1).toString());
         txtStatus.setText(tblBooking.getValueAt(selectedRow, 2).toString());
-        txtCheckInDate.setText(tblBooking.getValueAt(selectedRow, 3).toString());
-        txtCheckOutDate.setText(tblBooking.getValueAt(selectedRow, 4).toString());
+        try
+        {
+        	LocalDate checkInDate = Util.mapGUIDateToLocalDate(tblBooking.getValueAt(selectedRow, 3).toString());
+            txtCheckInDate.setText(Util.formatDateToDDMMYYYY(checkInDate));
+        }
+        catch (Exception e)
+        {
+            txtCheckInDate.setText("");
+        }   
+        try
+        {
+        	LocalDate checkOutDate = Util.mapGUIDateToLocalDate(tblBooking.getValueAt(selectedRow, 4).toString());
+        	txtCheckOutDate.setText(Util.formatDateToDDMMYYYY(checkOutDate));
+        }
+        catch (Exception e)
+        {
+        	txtCheckOutDate.setText("");
+        }
         txtNumberGuests.setText(tblBooking.getValueAt(selectedRow, 5).toString());
         if (tblBooking.getValueAt(selectedRow, 6) != null)
         	txtDiscount.setText(tblBooking.getValueAt(selectedRow, 6).toString());
+    }
+    
+    private Booking setBookingToBeDeleted() throws Exception
+    {
+    	Booking booking = new Booking();
+    	ClientController cc = new ClientController();
+        ChaletController chc = new ChaletController();
+        Chalet chalet;
+        Client client;
+        try 
+        {
+        	String chaletCode = Util.validateAndGetString(txtChaletCode.getText(), "Chalet Code");
+        	String RG = Util.validateAndGetString(txtClientRG.getText(), "RG");
+        	chalet = chc.searchByCode(chaletCode);
+        	client = cc.searchByRG(RG);
+        	booking.setChaletId(chalet.getChaletId());
+        	booking.setClientId(client.getClientId());
+        }
+        catch (Exception e)
+        {
+        	throw new Exception("Please Insert a Valid ChaletCode and a Valid RG");
+        }
+        
+        return booking;
     }
 
     private Booking mapFieldsToBooking() throws Exception 
@@ -381,6 +437,10 @@ public class FrmBooking extends JFrame
         	String RG = Util.validateAndGetString(txtClientRG.getText(), "RG");
         	chalet = chc.searchByCode(chaletCode);
         	client = cc.searchByRG(RG);
+        	if (chalet == null)
+        		throw new Exception("Invalid ChaletCode");
+        	if (client == null)
+        		throw new Exception("Invalid RG");
         	booking.setChaletId(chalet.getChaletId());
         	booking.setClientId(client.getClientId());
         	booking.setStatus(txtStatus.getText());
@@ -421,8 +481,8 @@ public class FrmBooking extends JFrame
                 chc.searchById(b.getChaletId()).getChaletCode(),
                 cc.searchById(b.getClientId()).getRG(), 
                 b.getStatus(), 
-                b.getCheckInDate(), 
-                b.getCheckOutDate(), 
+                Util.formatDateToDDMMYYYY(b.getCheckInDate()), 
+                Util.formatDateToDDMMYYYY(b.getCheckOutDate()), 
                 b.getNumberGuests(), 
                 b.getDiscount(), 
                 b.getTotalPrice()
