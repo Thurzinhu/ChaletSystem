@@ -52,15 +52,3 @@ CREATE TABLE IF NOT EXISTS booking (
     FOREIGN KEY (chalet_id) REFERENCES chalet(chalet_id),
     FOREIGN KEY (client_id) REFERENCES client(client_id)
 );
-
-SELECT name, birthday, chalet_code, ch.location, capacity, check_in_date, number_guests  FROM client c
-JOIN booking b ON b.client_id = c.client_id
-JOIN chalet ch ON ch.chalet_id = b.chalet_id;
-
-SELECT * FROM address;
-SELECT * FROM chalet;
-SELECT * FROM booking;
-SELECT * FROM client;
-
-SELECT * FROM address a
-JOIN client c ON c.client_id = a.client_id;
