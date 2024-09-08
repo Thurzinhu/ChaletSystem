@@ -10,5 +10,6 @@ public interface ChaletDAO
 	String updateChalet(Chalet chalet);
 	String deleteChalet(Chalet chalet);
 	List<Chalet> getAllChalets();
-	Chalet searchById(String id);
+	Chalet searchByCode(String code);
+	Chalet searchById(Integer chaletId);
 }

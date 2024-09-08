@@ -72,27 +72,6 @@ public class AddressDAOImplementation implements AddressDAO
 	}
 
 	@Override
-	public String deleteAddress(Address address)
-	{
-		String sql = "DELETE FROM address WHERE address_id = ?";
-		Connection dbConnection = ConnectionFactory.getConnection();
-		try
-		{
-			PreparedStatement statement = dbConnection.prepareStatement(sql);
-			statement.setInt(1, address.getAddressId());
-			return didSQLStatementWork(statement.executeUpdate(), "Address Deleted", "Could Not Delete Address");
-		}
-		catch (SQLException e)
-		{
-			return e.getMessage();
-		}
-		finally
-		{
-			ConnectionFactory.closeConnection(dbConnection);
-		}
-	}
-
-	@Override
 	public List<Address> getAllAddresses()
 	{
 		String sql = "SELECT * FROM address";
@@ -140,10 +119,10 @@ public class AddressDAOImplementation implements AddressDAO
         address.setAddressId(s.getInt("address_id"));
         address.setClientId(s.getInt("client_id"));
         address.setAddress(s.getString("address"));
-        address.setNeighborhood(s.getString("neighborhood"));
+    	address.setNeighborhood(s.getString("neighborhood"));
+    	address.setPostalCode(s.getString("postal_code"));        	
         address.setCity(s.getString("city"));
         address.setState(s.getString("state"));
-        address.setPostalCode(s.getString("postal_code"));
         return address;
 	}
 
@@ -174,7 +153,7 @@ public class AddressDAOImplementation implements AddressDAO
 	}
 
 	@Override
-	public List<Address> searchByClientId(Integer clientId)
+	public Address searchByClientId(Integer clientId)
 	{
 		String sql = "SELECT * FROM address WHERE client_id = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
@@ -183,13 +162,14 @@ public class AddressDAOImplementation implements AddressDAO
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			statement.setInt(1, clientId);
 			ResultSet set = statement.executeQuery();
-			if (set != null)
+			if (set.next())
 			{
-				return getAddressListFromSet(set);
+				return mapResultSetToAddress(set);
 			}
 		}
 		catch (SQLException e)
 		{
+			System.out.println(e.getMessage());
 		}
 		finally
 		{

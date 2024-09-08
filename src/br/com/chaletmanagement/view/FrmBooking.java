@@ -23,22 +23,26 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import br.com.chaletmanagement.controller.BookingController;
+import br.com.chaletmanagement.controller.ClientController;
+import br.com.chaletmanagement.controller.ChaletController;
 import br.com.chaletmanagement.model.Booking;
+import br.com.chaletmanagement.model.Client;
+import br.com.chaletmanagement.model.Chalet;
 import br.com.chaletmanagement.util.Util;
 
-public class FrmBooking extends JFrame {
+public class FrmBooking extends JFrame 
+{
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTable tblBooking;
-    private JTextField txtChaletId;
-    private JTextField txtClientId;
+    private JTextField txtChaletCode;
+    private JTextField txtClientRG;
     private JTextField txtStatus;
     private JTextField txtCheckInDate;
     private JTextField txtCheckOutDate;
     private JTextField txtNumberGuests;
     private JTextField txtDiscount;
-    private JTextField txtTotalPrice;
     private JLabel lblMessage;
 
     public FrmBooking() {
@@ -65,7 +69,7 @@ public class FrmBooking extends JFrame {
         tblBooking = new JTable();
         tblBooking.setModel(new DefaultTableModel(
             new Object[][] {},
-            new String[] { "Chalet ID", "Client ID", "Status", "Check-In Date", "Check-Out Date", "Number of Guests", "Discount", "Total Price" }
+            new String[] { "Chalet Code", "Client RG", "Status", "Check-In Date", "Check-Out Date", "Number of Guests", "Discount", "Total Price" }
         ) {
             Class[] columnTypes = new Class[] { Integer.class, Integer.class, String.class, String.class, String.class, Integer.class, Double.class, Double.class };
 
@@ -143,8 +147,8 @@ public class FrmBooking extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 Booking booking = new Booking();
                 BookingController bc = new BookingController();
-                booking.setChaletId(Integer.parseInt(txtChaletId.getText()));
-                int i = JOptionPane.showConfirmDialog(null, "Do you want to delete this booking for Chalet ID: " + txtChaletId.getText() + "?",
+                booking.setChaletId(Integer.parseInt(txtChaletCode.getText()));
+                int i = JOptionPane.showConfirmDialog(null, "Do you want to delete this booking for Chalet ID: " + txtChaletCode.getText() + "?",
                         "Delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (JOptionPane.YES_OPTION == i) {
                     lblMessage.setText("Message: " + bc.deleteBooking(booking));
@@ -169,14 +173,13 @@ public class FrmBooking extends JFrame {
         btnClear.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                txtChaletId.setText("");
-                txtClientId.setText("");
+                txtChaletCode.setText("");
+                txtClientRG.setText("");
                 txtStatus.setText("");
                 txtCheckInDate.setText("");
                 txtCheckOutDate.setText("");
                 txtNumberGuests.setText("");
                 txtDiscount.setText("");
-                txtTotalPrice.setText("");
                 DefaultTableModel tbm = (DefaultTableModel) tblBooking.getModel();
                 tbm.setRowCount(0);
             }
@@ -234,17 +237,17 @@ public class FrmBooking extends JFrame {
         );
         panel_1.setLayout(gl_panel_1);
 
-        JLabel lblChaletId = new JLabel("Chalet ID");
+        JLabel lblChaletId = new JLabel("Chalet Code");
         lblChaletId.setFont(new Font("Arial", Font.BOLD, 14));
 
-        txtChaletId = new JTextField();
-        txtChaletId.setColumns(10);
+        txtChaletCode = new JTextField();
+        txtChaletCode.setColumns(10);
 
-        JLabel lblClientId = new JLabel("Client ID");
+        JLabel lblClientId = new JLabel("Client RG");
         lblClientId.setFont(new Font("Arial", Font.BOLD, 14));
 
-        txtClientId = new JTextField();
-        txtClientId.setColumns(10);
+        txtClientRG = new JTextField();
+        txtClientRG.setColumns(10);
 
         JLabel lblStatus = new JLabel("Status");
         lblStatus.setFont(new Font("Arial", Font.BOLD, 14));
@@ -276,89 +279,77 @@ public class FrmBooking extends JFrame {
         txtDiscount = new JTextField();
         txtDiscount.setColumns(10);
 
-        JLabel lblTotalPrice = new JLabel("Total Price");
-        lblTotalPrice.setFont(new Font("Arial", Font.BOLD, 14));
-
-        txtTotalPrice = new JTextField();
-        txtTotalPrice.setColumns(10);
-
         lblMessage = new JLabel("Message:");
         lblMessage.setFont(new Font("Arial", Font.BOLD, 14));
         lblMessage.setForeground(Color.RED);
 
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
         gl_contentPane.setHorizontalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                        .addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addComponent(lblChaletId)
-                                .addComponent(lblClientId)
-                                .addComponent(lblStatus)
-                                .addComponent(lblCheckInDate)
-                                .addComponent(lblCheckOutDate)
-                                .addComponent(lblNumberGuests)
-                                .addComponent(lblDiscount)
-                                .addComponent(lblTotalPrice))
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addComponent(txtChaletId, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(txtClientId, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(txtStatus, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(txtCheckInDate, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(txtCheckOutDate, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(txtNumberGuests, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(txtDiscount, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(txtTotalPrice, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
-                        .addComponent(lblMessage))
-                    .addContainerGap())
+        	gl_contentPane.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        				.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        				.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 1160, Short.MAX_VALUE)
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        						.addComponent(lblChaletId)
+        						.addComponent(lblClientId)
+        						.addComponent(lblStatus)
+        						.addComponent(lblCheckInDate)
+        						.addComponent(lblCheckOutDate)
+        						.addComponent(lblNumberGuests)
+        						.addComponent(lblDiscount))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        						.addComponent(txtChaletCode, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+        						.addComponent(txtClientRG, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+        						.addComponent(txtStatus, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+        						.addComponent(txtCheckInDate, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+        						.addComponent(txtCheckOutDate, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+        						.addComponent(txtNumberGuests, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+        						.addComponent(txtDiscount, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)))
+        				.addComponent(lblMessage))
+        			.addContainerGap())
         );
         gl_contentPane.setVerticalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblChaletId)
-                        .addComponent(txtChaletId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblClientId)
-                        .addComponent(txtClientId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblStatus)
-                        .addComponent(txtStatus, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblCheckInDate)
-                        .addComponent(txtCheckInDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblCheckOutDate)
-                        .addComponent(txtCheckOutDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblNumberGuests)
-                        .addComponent(txtNumberGuests, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblDiscount)
-                        .addComponent(txtDiscount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblTotalPrice)
-                        .addComponent(txtTotalPrice, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addComponent(lblMessage)
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap())
+        	gl_contentPane.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblChaletId)
+        				.addComponent(txtChaletCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblClientId)
+        				.addComponent(txtClientRG, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblStatus)
+        				.addComponent(txtStatus, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblCheckInDate)
+        				.addComponent(txtCheckInDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblCheckOutDate)
+        				.addComponent(txtCheckOutDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblNumberGuests)
+        				.addComponent(txtNumberGuests, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblDiscount)
+        				.addComponent(txtDiscount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addGap(37)
+        			.addComponent(lblMessage)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+        			.addContainerGap())
         );
         contentPane.setLayout(gl_contentPane);
     }
@@ -367,40 +358,75 @@ public class FrmBooking extends JFrame {
     private void fillFieldsFromSelectedRow()
     {
         int selectedRow = tblBooking.getSelectedRow();
-        txtChaletId.setText(tblBooking.getValueAt(selectedRow, 0).toString());
-        txtClientId.setText(tblBooking.getValueAt(selectedRow, 1).toString());
+        txtChaletCode.setText(tblBooking.getValueAt(selectedRow, 0).toString());
+        txtClientRG.setText(tblBooking.getValueAt(selectedRow, 1).toString());
         txtStatus.setText(tblBooking.getValueAt(selectedRow, 2).toString());
         txtCheckInDate.setText(tblBooking.getValueAt(selectedRow, 3).toString());
         txtCheckOutDate.setText(tblBooking.getValueAt(selectedRow, 4).toString());
         txtNumberGuests.setText(tblBooking.getValueAt(selectedRow, 5).toString());
-        txtDiscount.setText(tblBooking.getValueAt(selectedRow, 6).toString());
-        txtTotalPrice.setText(tblBooking.getValueAt(selectedRow, 7).toString());
+        if (tblBooking.getValueAt(selectedRow, 6) != null)
+        	txtDiscount.setText(tblBooking.getValueAt(selectedRow, 6).toString());
     }
 
-    private Booking mapFieldsToBooking() throws Exception {
+    private Booking mapFieldsToBooking() throws Exception 
+    {
         Booking booking = new Booking();
-        try {
-            booking.setChaletId(Integer.parseInt(txtChaletId.getText()));
-            booking.setClientId(Integer.parseInt(txtClientId.getText()));
-            booking.setStatus(txtStatus.getText());
+        ClientController cc = new ClientController();
+        ChaletController chc = new ChaletController();
+        Chalet chalet;
+        Client client;
+        try 
+        {
+        	String chaletCode = Util.validateAndGetString(txtChaletCode.getText(), "Chalet Code");
+        	String RG = Util.validateAndGetString(txtClientRG.getText(), "RG");
+        	chalet = chc.searchByCode(chaletCode);
+        	client = cc.searchByRG(RG);
+        	booking.setChaletId(chalet.getChaletId());
+        	booking.setClientId(client.getClientId());
+        	booking.setStatus(txtStatus.getText());
             booking.setCheckInDate(Util.validateAndGetDate(txtCheckInDate.getText(), "Check In Date"));
             booking.setCheckOutDate(Util.validateAndGetDate(txtCheckOutDate.getText(), "Check Out Date"));
-            booking.setNumberGuests(Integer.parseInt(txtNumberGuests.getText()));
-            booking.setDiscount(Double.parseDouble(txtDiscount.getText()));
-            booking.setTotalPrice(Double.parseDouble(txtTotalPrice.getText()));
-        } catch (NumberFormatException e) {
+            booking.setNumberGuests(Util.validateAndGetInteger(txtNumberGuests.getText(), "Number guests"));
+            booking.setDiscount(Util.validateAndGetDouble(txtDiscount.getText(), "Discount"));
+        } 
+        catch (NumberFormatException e) 
+        {
             throw new Exception("Please enter valid numeric values.");
         }
+
+        if (booking.getNumberGuests() > chalet.getCapacity())
+        {
+            throw new Exception("Number of guests exceed chalet capacity");
+        }
+
+        if (!booking.getCheckOutDate().isAfter(booking.getCheckInDate()))
+        {
+            throw new IllegalArgumentException("Check Out Date must be after Check In Date.");
+        }
+
         return booking;
     }
 
-    private void searchBooking() {
+    private void searchBooking() 
+    {
         DefaultTableModel tbm = (DefaultTableModel) tblBooking.getModel();
         BookingController bc = new BookingController();
         List<Booking> bookings = bc.getAllBookings();
         tbm.setRowCount(0);
-        for (Booking b : bookings) {
-            tbm.addRow(new Object[] { b.getChaletId(), b.getClientId(), b.getStatus(), b.getCheckInDate(), b.getCheckOutDate(), b.getNumberGuests(), b.getDiscount(), b.getTotalPrice() });
+        for (Booking b : bookings)
+        {
+            ClientController cc = new ClientController();
+            ChaletController chc = new ChaletController();
+            tbm.addRow(new Object[] { 
+                chc.searchById(b.getChaletId()).getChaletCode(),
+                cc.searchById(b.getClientId()).getRG(), 
+                b.getStatus(), 
+                b.getCheckInDate(), 
+                b.getCheckOutDate(), 
+                b.getNumberGuests(), 
+                b.getDiscount(), 
+                b.getTotalPrice()
+            });
         }
     }
 }

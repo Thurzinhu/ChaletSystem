@@ -11,22 +11,13 @@ public class Teste
 	public static void main(String[] args)
 	{
 		Connection con = ConnectionFactory.getConnection();
-		BookingController bc = new BookingController();
-		Booking b = new Booking();
-		b.setChaletId(1);
-		b.setClientId(1);
-		b.setCheckInDate(LocalDate.now());
-		b.setCheckOutDate(LocalDate.now().plusDays(7));
-		b.setDiscount(12.00);
-		b.setNumberGuests(2);
-		b.setStatus("Reserved");
-		b.setTotalPrice(600.0);
-
-		System.out.println(bc.addBooking(b));
-		for (Booking bo : bc.getAllBookings())
-		{
-			System.out.println(bo.getNumberGuests());
-		}
+		AddressController ac = new AddressController();
+		Address a = new Address();
+		a.setAddress("VP");
+		a.setCity("SP");
+		a.setClientId(1);
+		a.setState("Brazil");
+		System.out.println(ac.addAddress(a));
 		
 
 		if(con != null)

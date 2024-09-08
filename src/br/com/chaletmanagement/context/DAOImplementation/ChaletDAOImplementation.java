@@ -135,6 +135,7 @@ public class ChaletDAOImplementation implements ChaletDAO
     private Chalet mapResultSetToChalet(ResultSet s) throws SQLException
     {
         Chalet chalet = new Chalet();
+        chalet.setChaletId(s.getInt("chalet_id"));
         chalet.setChaletCode(s.getString("chalet_code"));
         chalet.setLocation(s.getString("location"));
         chalet.setCapacity(s.getInt("capacity"));
@@ -144,14 +145,40 @@ public class ChaletDAOImplementation implements ChaletDAO
     }
 
     @Override
-    public Chalet searchById(String id)
+    public Chalet searchByCode(String code)
     {
         String sql = "SELECT * FROM chalet WHERE chalet_code = ?";
         Connection dbConnection = ConnectionFactory.getConnection();
         try
         {
             PreparedStatement statement = dbConnection.prepareStatement(sql);
-            statement.setString(1, id);
+            statement.setString(1, code);
+            ResultSet set = statement.executeQuery();
+            if (set.next())
+            {
+                return mapResultSetToChalet(set);
+            }
+        }
+        catch (SQLException e)
+        {
+        	
+        }
+        finally
+        {
+            ConnectionFactory.closeConnection(dbConnection);
+        }
+        return null;
+    }
+    
+    @Override
+    public Chalet searchById(Integer id)
+    {
+        String sql = "SELECT * FROM chalet WHERE chalet_id = ?";
+        Connection dbConnection = ConnectionFactory.getConnection();
+        try
+        {
+            PreparedStatement statement = dbConnection.prepareStatement(sql);
+            statement.setInt(1, id);
             ResultSet set = statement.executeQuery();
             if (set.next())
             {

@@ -31,7 +31,7 @@ public class FrmClient extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTable tblClient;
-    private JTextField txtID;
+    private JTextField txtRG;
     private JTextField txtName;
     private JTextField txtBirthday;
     private JTextField txtAddress;
@@ -155,8 +155,8 @@ public class FrmClient extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 Client client = new Client();
                 ClientController cc = new ClientController();
-                client.setId(txtID.getText());
-                int i = JOptionPane.showConfirmDialog(null, "Do you want to delete this client with ID: " + txtID.getText() + "?",
+                client.setRG(txtRG.getText());
+                int i = JOptionPane.showConfirmDialog(null, "Do you want to delete this client with ID: " + txtRG.getText() + "?",
                         "Delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (JOptionPane.YES_OPTION == i) {
                     lblMessage.setText("Message: " + cc.deleteClient(client));
@@ -181,7 +181,7 @@ public class FrmClient extends JFrame {
         btnClear.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                txtID.setText("");
+                txtRG.setText("");
                 txtName.setText("");
                 txtBirthday.setText("");
                 txtAddress.setText("");
@@ -246,11 +246,11 @@ public class FrmClient extends JFrame {
         );
         panelButtons.setLayout(gl_panelButtons);
 
-        JLabel lblID = new JLabel("ID");
+        JLabel lblID = new JLabel("RG");
         lblID.setFont(new Font("Arial", Font.BOLD, 14));
 
-        txtID = new JTextField();
-        txtID.setColumns(10);
+        txtRG = new JTextField();
+        txtRG.setColumns(10);
 
         JLabel lblName = new JLabel("Name");
         lblName.setFont(new Font("Arial", Font.BOLD, 14));
@@ -316,7 +316,7 @@ public class FrmClient extends JFrame {
                                 .addComponent(lblPostalCode))
                             .addGap(18)
                             .addGroup(gl_panelForm.createParallelGroup(Alignment.LEADING)
-                                .addComponent(txtID)
+                                .addComponent(txtRG)
                                 .addComponent(txtName)
                                 .addComponent(txtBirthday)
                                 .addComponent(txtAddress)
@@ -333,7 +333,7 @@ public class FrmClient extends JFrame {
                     .addContainerGap()
                     .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
                         .addComponent(lblID)
-                        .addComponent(txtID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtRG, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(ComponentPlacement.RELATED)
                     .addGroup(gl_panelForm.createParallelGroup(Alignment.BASELINE)
                         .addComponent(lblName)
@@ -402,13 +402,11 @@ public class FrmClient extends JFrame {
 
         for (Client client : clients) 
         {
-            List<Address> addresses = cc.getAddressesByClientId(client);
-
-            if (!addresses.isEmpty())
+            Address address = cc.getAddressByClientId(client);
+            if (address != null)
             {
-                Address address = addresses.get(0);
                 tbm.addRow(new Object[] {
-                    client.getId(),
+                    client.getRG(),
                     client.getName(),
                     client.getBirthday().toString(),
                     address.getAddress(),
@@ -422,7 +420,7 @@ public class FrmClient extends JFrame {
             {
                 tbm.addRow(new Object[] 
                 {
-                    client.getId(),
+                    client.getRG(),
                     client.getName(),
                     client.getBirthday().toString(),
                     "", "", "", "", ""
@@ -434,24 +432,24 @@ public class FrmClient extends JFrame {
     private void fillFieldsFromSelectedRow()
     {
         int selectedRow = tblClient.getSelectedRow();
-        txtID.setText(tblClient.getValueAt(selectedRow, 0).toString());
+        txtRG.setText(tblClient.getValueAt(selectedRow, 0).toString());
         txtName.setText(tblClient.getValueAt(selectedRow, 1).toString());
         txtBirthday.setText(tblClient.getValueAt(selectedRow, 2).toString());
         txtAddress.setText(tblClient.getValueAt(selectedRow, 3).toString());
-        txtNeighborhood.setText(tblClient.getValueAt(selectedRow, 4).toString());
+        if (tblClient.getValueAt(selectedRow, 4) != null)
+        	txtNeighborhood.setText(tblClient.getValueAt(selectedRow, 4).toString());
         txtCity.setText(tblClient.getValueAt(selectedRow, 5).toString());
         txtState.setText(tblClient.getValueAt(selectedRow, 6).toString());
-        txtPostalCode.setText(tblClient.getValueAt(selectedRow, 7).toString());
+        if (tblClient.getValueAt(selectedRow, 7) != null)
+        	txtPostalCode.setText(tblClient.getValueAt(selectedRow, 7).toString());
     }
 
     private Client mapFieldsToClient() throws Exception 
     {
         Client client = new Client();
-        
+        client.setRG(Util.validateAndGetString(txtRG.getText().trim(), "RG"));
         client.setName(Util.validateAndGetString(txtName.getText().trim(), "Name"));
-        client.setId(Util.validateAndGetString(txtID.getText().trim(), "ID"));
         client.setBirthday(Util.validateAndGetDate(txtBirthday.getText().trim(), "Birthday"));
-        
         return client;
     }
 
@@ -459,10 +457,10 @@ public class FrmClient extends JFrame {
     {
         Address address = new Address();
         address.setAddress(Util.validateAndGetString(txtAddress.getText().trim(), "Address"));
-        address.setNeighborhood(Util.validateAndGetString(txtNeighborhood.getText().trim(), "Neighborhood"));
+        //address.setNeighborhood(Util.validateAndGetString(txtNeighborhood.getText().trim(), "Neighborhood"));
         address.setCity(Util.validateAndGetString(txtCity.getText().trim(), "City"));
         address.setState(Util.validateAndGetString(txtState.getText().trim(), "State"));
-        address.setPostalCode(Util.validateAndGetString(txtPostalCode.getText().trim(), "Postal Code"));
+        //address.setPostalCode(Util.validateAndGetString(txtPostalCode.getText().trim(), "Postal Code"));
         return address;
     }
 }

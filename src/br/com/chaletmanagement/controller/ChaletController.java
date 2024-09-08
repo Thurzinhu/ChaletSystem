@@ -35,8 +35,13 @@ public class ChaletController
         return chaletDAO.getAllChalets();
     }
 
-    public Chalet searchById(String id)
+    public Chalet searchByCode(String code)
     {
-        return chaletDAO.searchById(id);
+        return chaletDAO.searchByCode(code);
+    }
+    
+    public Chalet searchById(Integer id)
+    {
+    	return chaletDAO.searchById(id);
     }
 }

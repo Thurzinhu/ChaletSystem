@@ -8,7 +8,12 @@ public class Chalet
     private int capacity;
     private Double peakSeasonPrice;
     private Double normalPrice;
-
+    
+    public void setChaletId(Integer id)
+    {
+    	chaletId = id;
+    }
+    
     public Integer getChaletId()
     {
         return chaletId;

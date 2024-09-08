@@ -7,8 +7,7 @@ public interface AddressDAO
 {
     String addAddress(Address address);
     String updateAddress(Address address);
-    String deleteAddress(Address address);
     List<Address> getAllAddresses();
-    Address searchById(Integer id);
-    List<Address> searchByClientId(Integer clientId);
+    Address searchById(Integer addressId);
+    Address searchByClientId(Integer clientId);
 }

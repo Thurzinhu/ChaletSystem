@@ -23,12 +23,12 @@ public class ClientDAOImplementation implements ClientDAO
 	@Override
 	public String addClient(Client client)
 	{
-		String sql = "INSERT INTO client(id, name, birthday) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO client(RG, name, birthday) VALUES (?, ?, ?)";
 		Connection dbConnection = ConnectionFactory.getConnection();
 		try
 		{
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
-			statement.setString(1, client.getId());
+			statement.setString(1, client.getRG());
 			statement.setString(2, client.getName());
 			statement.setObject(3, client.getBirthday());
 			return didSQLStamentWork(statement.executeUpdate(), "Client Inserted", "Could Not Insert Client");
@@ -47,14 +47,14 @@ public class ClientDAOImplementation implements ClientDAO
 	@Override
 	public String updateClient(Client client)
 	{
-		String sql = "UPDATE client SET name = ?, birthday = ? WHERE id = ?";
+		String sql = "UPDATE client SET name = ?, birthday = ? WHERE RG = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
 		try
 		{
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			statement.setString(1, client.getName());
 			statement.setObject(2, client.getBirthday());
-			statement.setString(3, client.getId());
+			statement.setString(3, client.getRG());
 			return didSQLStamentWork(statement.executeUpdate(), "Client Updated", "Could Not Update Client");
 		}
 		catch (SQLException e)
@@ -70,12 +70,12 @@ public class ClientDAOImplementation implements ClientDAO
 	@Override
 	public String deleteClient(Client client)
 	{
-		String sql = "DELETE FROM client WHERE id = ?";
+		String sql = "DELETE FROM client WHERE RG = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
 		try
 		{
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
-			statement.setString(1, client.getId());
+			statement.setString(1, client.getRG());
 			return didSQLStamentWork(statement.executeUpdate(), "Client Deleted", "Could Not Delete Client");
 		}
 		catch (SQLException e)
@@ -136,21 +136,48 @@ public class ClientDAOImplementation implements ClientDAO
 	{
 		Client client = new Client();
 		client.setClientId(s.getInt("client_id"));
-        client.setId(s.getString("id"));
+        client.setRG(s.getString("RG"));
         client.setName(s.getString("name"));
         client.setBirthday(s.getObject("birthday", LocalDate.class));
         return client;
 	}
 
 	@Override
-	public Client searchById(String id)
+	public Client searchByRG(String RG)
 	{
-		String sql = "SELECT * FROM client WHERE id = ?";
+		String sql = "SELECT * FROM client WHERE RG = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
 		try
 		{
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
-			statement.setString(1, id);
+			statement.setString(1, RG);
+			ResultSet set = statement.executeQuery();
+			if (set.next())
+			{
+				return mapResultSetToClient(set);
+			}
+		}
+		catch (SQLException e)
+		{
+			
+		}
+		finally
+		{
+			ConnectionFactory.closeConnection(dbConnection);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public Client searchById(Integer id)
+	{
+		String sql = "SELECT * FROM client WHERE client_id = ?";
+		Connection dbConnection = ConnectionFactory.getConnection();
+		try
+		{
+			PreparedStatement statement = dbConnection.prepareStatement(sql);
+			statement.setInt(1, id);
 			ResultSet set = statement.executeQuery();
 			if (set.next())
 			{

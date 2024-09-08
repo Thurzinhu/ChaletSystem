@@ -12,7 +12,7 @@ public class ConnectionFactory
 	{
 		String user = "postgres";
 		String senha = "1234";
-		String url = "jdbc:postgresql://127.0.0.1:5432/teste";
+		String url = "jdbc:postgresql://127.0.0.1:5432/chalet_heaven";
 		Connection dbConnection = null;
 		try 
 		{

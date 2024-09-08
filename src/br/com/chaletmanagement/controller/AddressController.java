@@ -24,11 +24,6 @@ public class AddressController
 		return addressDAO.updateAddress(address);
 	}
 
-	public String deleteAddress(Address address)
-	{
-		return addressDAO.deleteAddress(address);
-	}
-
 	public List<Address> getAllAddresses()
 	{
 		return addressDAO.getAllAddresses();
@@ -39,7 +34,7 @@ public class AddressController
 		return addressDAO.searchById(id);
 	}
 
-	public List<Address> searchByClientId(Integer clientId)
+	public Address searchByClientId(Integer clientId)
 	{
 		return addressDAO.searchByClientId(clientId);
 	}

@@ -9,5 +9,6 @@ public interface ClientDAO
 	String updateClient(Client client);
 	String deleteClient(Client client);
 	List<Client> getAllClients();
-	Client searchById(String id);
+	Client searchByRG(String RG);
+	Client searchById(Integer id);
 }

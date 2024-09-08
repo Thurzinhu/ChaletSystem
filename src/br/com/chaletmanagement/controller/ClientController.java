@@ -20,7 +20,7 @@ public class ClientController
 	public String addClient(Client client, Address address)
 	{
 		String result = clientDAO.addClient(client);
-		Integer clientId = clientDAO.searchById(client.getId()).getClientId(); 
+		Integer clientId = clientDAO.searchByRG(client.getRG()).getClientId(); 
 		address.setClientId(clientId);
 		addressController.addAddress(address);
 		return result;
@@ -29,7 +29,7 @@ public class ClientController
 	public String updateClient(Client client, Address address)
 	{
 		String result = clientDAO.updateClient(client);
-		Integer clientId = clientDAO.searchById(client.getId()).getClientId();
+		Integer clientId = clientDAO.searchByRG(client.getRG()).getClientId();
 		address.setClientId(clientId);
 		addressController.updateAddress(address);
 		return result;
@@ -37,15 +37,6 @@ public class ClientController
 
 	public String deleteClient(Client client)
 	{
-		Client clientToBeDeleted = clientDAO.searchById(client.getId());			
-		if (clientToBeDeleted == null)
-			return "Could Not Delete Client";
-		
-		List<Address> addresses = addressController.searchByClientId(clientToBeDeleted.getClientId());
-		for (Address address : addresses)
-		{
-			addressController.deleteAddress(address);
-		}
 		return clientDAO.deleteClient(client);
 	}
 
@@ -54,14 +45,19 @@ public class ClientController
 		return clientDAO.getAllClients();
 	}
 
-	public Client searchById(String id)
+	public Client searchByRG(String RG)
+	{
+		return clientDAO.searchByRG(RG);
+	}
+
+	public Client searchById(Integer id)
 	{
 		return clientDAO.searchById(id);
 	}
 
-	public List<Address> getAddressesByClientId(Client client)
+	public Address getAddressByClientId(Client client)
 	{
-		Integer clientId = clientDAO.searchById(client.getId()).getClientId();
+		Integer clientId = clientDAO.searchByRG(client.getRG()).getClientId();
 		return addressController.searchByClientId(clientId);
 	}
 }

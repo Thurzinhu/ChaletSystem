@@ -6,7 +6,7 @@ public class Client
 {
 	private Integer clientId;
 	private String name;
-	private String id;
+	private String RG;
 	private LocalDate birthday;
 	
 	public void setClientId(Integer clientId)
@@ -29,14 +29,14 @@ public class Client
 		this.name = name;
 	}
 	
-	public String getId()
+	public String getRG()
 	{
-		return id;
+		return RG;
 	}
 	
-	public void setId(String id)
+	public void setRG(String RG)
 	{
-		this.id = id;
+		this.RG = RG;
 	}
 	
 	public LocalDate getBirthday()

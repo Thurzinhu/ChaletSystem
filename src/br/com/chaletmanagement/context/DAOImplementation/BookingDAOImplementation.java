@@ -22,19 +22,18 @@ public class BookingDAOImplementation implements BookingDAO
     @Override
     public String addBooking(Booking booking)
     {
-        String sql = "INSERT INTO booking(chalet_id, client_id, status, check_in_date, check_out_date, number_guests, discount, total_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO booking(chalet_id, client_id, check_in_date, check_out_date, number_guests, discount, total_price) VALUES (?, ?, ?, ?, ?, ?, ?)";
         Connection dbConnection = ConnectionFactory.getConnection();
         try
         {
             PreparedStatement statement = dbConnection.prepareStatement(sql);
             statement.setInt(1, booking.getChaletId());
             statement.setInt(2, booking.getClientId());
-            statement.setString(3, booking.getStatus());
-            statement.setDate(4, java.sql.Date.valueOf(booking.getCheckInDate()));
-            statement.setDate(5, java.sql.Date.valueOf(booking.getCheckOutDate()));
-            statement.setInt(6, booking.getNumberGuests());
-            statement.setDouble(7, booking.getDiscount());
-            statement.setDouble(8, booking.getTotalPrice());
+            statement.setDate(3, java.sql.Date.valueOf(booking.getCheckInDate()));
+            statement.setDate(4, java.sql.Date.valueOf(booking.getCheckOutDate()));
+            statement.setInt(5, booking.getNumberGuests());
+            statement.setDouble(6, booking.getDiscount());
+            statement.setDouble(7, booking.getTotalPrice());
             return didSQLStamentWork(statement.executeUpdate(), "Booking Inserted", "Could Not Insert Booking");
         }
         catch (SQLException e)
@@ -78,12 +77,13 @@ public class BookingDAOImplementation implements BookingDAO
     @Override
     public String deleteBooking(Booking booking)
     {
-        String sql = "DELETE FROM booking WHERE chalet_id = ?";
+        String sql = "DELETE FROM booking WHERE chalet_id = ? AND client_id = ?";
         Connection dbConnection = ConnectionFactory.getConnection();
         try
         {
             PreparedStatement statement = dbConnection.prepareStatement(sql);
             statement.setInt(1, booking.getChaletId());
+            statement.setInt(2, booking.getClientId());
             return didSQLStamentWork(statement.executeUpdate(), "Booking Deleted", "Could Not Delete Booking");
         }
         catch (SQLException e)
