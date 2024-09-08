@@ -1,71 +1,58 @@
 package br.com.chaletmanagement.model;
 
-public class Chalet
-{
-    private Integer chaletId;
-    private String chaletCode;
-    private String location;
-    private int capacity;
-    private Double peakSeasonPrice;
-    private Double normalPrice;
-    
-    public void setChaletId(Integer id)
-    {
-    	chaletId = id;
-    }
-    
-    public Integer getChaletId()
-    {
-        return chaletId;
-    }
+public class Chalet {
+	private Integer chaletId;
+	private String chaletCode;
+	private String location;
+	private int capacity;
+	private Double peakSeasonPrice;
+	private Double normalPrice;
 
-    public String getLocation()
-    {
-        return location;
-    }
+	public void setChaletId(Integer id) {
+		chaletId = id;
+	}
 
-    public void setLocation(String location)
-    {
-        this.location = location;
-    }
+	public Integer getChaletId() {
+		return chaletId;
+	}
 
-    public int getCapacity()
-    {
-        return capacity;
-    }
+	public String getLocation() {
+		return location;
+	}
 
-    public void setCapacity(int capacity)
-    {
-        this.capacity = capacity;
-    }
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
-    public Double getPeakSeasonPrice()
-    {
-        return peakSeasonPrice;
-    }
+	public int getCapacity() {
+		return capacity;
+	}
 
-    public void setPeakSeasonPrice(Double peakSeasonPrice)
-    {
-        this.peakSeasonPrice = peakSeasonPrice;
-    }
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
 
-    public Double getNormalPrice()
-    {
-        return normalPrice;
-    }
+	public Double getPeakSeasonPrice() {
+		return peakSeasonPrice;
+	}
 
-    public void setNormalPrice(Double normalPrice)
-    {
-        this.normalPrice = normalPrice;
-    }
-    
-    public String getChaletCode()
-    {
+	public void setPeakSeasonPrice(Double peakSeasonPrice) {
+		this.peakSeasonPrice = peakSeasonPrice;
+	}
+
+	public Double getNormalPrice() {
+		return normalPrice;
+	}
+
+	public void setNormalPrice(Double normalPrice) {
+		this.normalPrice = normalPrice;
+	}
+
+	public String getChaletCode() {
 		return chaletCode;
 	}
 
-	public void setChaletCode(String chaletCode)
-	{
+	public void setChaletCode(String chaletCode) {
 		this.chaletCode = chaletCode;
 	}
 }

@@ -13,186 +13,138 @@ import br.com.chaletmanagement.context.ConnectionFactory;
 import br.com.chaletmanagement.context.DAO.ClientDAO;
 import br.com.chaletmanagement.model.Client;
 
-public class ClientDAOImplementation implements ClientDAO
-{
-	private String didSQLStamentWork(int n, String successfullMessage, String errorMessage)
-	{
+public class ClientDAOImplementation implements ClientDAO {
+	private String didSQLStamentWork(int n, String successfullMessage, String errorMessage) {
 		return (n > 0) ? successfullMessage : errorMessage;
 	}
-	
+
 	@Override
-	public String addClient(Client client)
-	{
+	public String addClient(Client client) {
 		String sql = "INSERT INTO client(RG, name, birthday) VALUES (?, ?, ?)";
 		Connection dbConnection = ConnectionFactory.getConnection();
-		try
-		{
+		try {
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			statement.setString(1, client.getRG());
 			statement.setString(2, client.getName());
 			statement.setObject(3, client.getBirthday());
 			return didSQLStamentWork(statement.executeUpdate(), "Client Inserted", "Could Not Insert Client");
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			return e.getMessage();
-		}
-		finally
-		{
+		} finally {
 			ConnectionFactory.closeConnection(dbConnection);
 		}
 	}
 
-
 	@Override
-	public String updateClient(Client client)
-	{
+	public String updateClient(Client client) {
 		String sql = "UPDATE client SET name = ?, birthday = ? WHERE RG = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
-		try
-		{
+		try {
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			statement.setString(1, client.getName());
 			statement.setObject(2, client.getBirthday());
 			statement.setString(3, client.getRG());
 			return didSQLStamentWork(statement.executeUpdate(), "Client Updated", "Could Not Update Client");
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			return e.getMessage();
-		}
-		finally
-		{
+		} finally {
 			ConnectionFactory.closeConnection(dbConnection);
 		}
 	}
 
 	@Override
-	public String deleteClient(Client client)
-	{
+	public String deleteClient(Client client) {
 		String sql = "DELETE FROM client WHERE RG = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
-		try
-		{
+		try {
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			statement.setString(1, client.getRG());
 			return didSQLStamentWork(statement.executeUpdate(), "Client Deleted", "Could Not Delete Client");
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			return e.getMessage();
-		}
-		finally
-		{
+		} finally {
 			ConnectionFactory.closeConnection(dbConnection);
 		}
 	}
 
 	@Override
-	public List<Client> getAllClients()
-	{
+	public List<Client> getAllClients() {
 		String sql = "SELECT * FROM client";
 		Connection dbConnection = ConnectionFactory.getConnection();
-		try
-		{
+		try {
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			ResultSet set = statement.executeQuery();
-			if (set != null)
-			{
+			if (set != null) {
 				return getClientsListFromSet(set);
 			}
-		}
-		catch (SQLException e)
-		{
-			
-		}
-		finally
-		{
+		} catch (SQLException e) {
+
+		} finally {
 			ConnectionFactory.closeConnection(dbConnection);
 		}
-		
+
 		return null;
 	}
-	
-	private List<Client> getClientsListFromSet(ResultSet s) throws SQLException
-	{
-	    List<Client> clients = new ArrayList<>();
-	    while (s.next())
-	    {
-	    	try
-	    	{
-	    		clients.add(mapResultSetToClient(s));	    		
-	    	}
-	    	catch (SQLException e)
-	    	{
-	    		
-	    	}
-	     
-	    }
-	    return clients;
+
+	private List<Client> getClientsListFromSet(ResultSet s) throws SQLException {
+		List<Client> clients = new ArrayList<>();
+		while (s.next()) {
+			try {
+				clients.add(mapResultSetToClient(s));
+			} catch (SQLException e) {
+
+			}
+
+		}
+		return clients;
 	}
-	
-	private Client mapResultSetToClient(ResultSet s) throws SQLException
-	{
+
+	private Client mapResultSetToClient(ResultSet s) throws SQLException {
 		Client client = new Client();
 		client.setClientId(s.getInt("client_id"));
-        client.setRG(s.getString("RG"));
-        client.setName(s.getString("name"));
-        client.setBirthday(s.getObject("birthday", LocalDate.class));
-        return client;
+		client.setRG(s.getString("RG"));
+		client.setName(s.getString("name"));
+		client.setBirthday(s.getObject("birthday", LocalDate.class));
+		return client;
 	}
 
 	@Override
-	public Client searchByRG(String RG)
-	{
+	public Client searchByRG(String RG) {
 		String sql = "SELECT * FROM client WHERE RG = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
-		try
-		{
+		try {
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			statement.setString(1, RG);
 			ResultSet set = statement.executeQuery();
-			if (set.next())
-			{
+			if (set.next()) {
 				return mapResultSetToClient(set);
 			}
-		}
-		catch (SQLException e)
-		{
-			
-		}
-		finally
-		{
+		} catch (SQLException e) {
+
+		} finally {
 			ConnectionFactory.closeConnection(dbConnection);
 		}
-		
+
 		return null;
 	}
 
 	@Override
-	public Client searchById(Integer id)
-	{
+	public Client searchById(Integer id) {
 		String sql = "SELECT * FROM client WHERE client_id = ?";
 		Connection dbConnection = ConnectionFactory.getConnection();
-		try
-		{
+		try {
 			PreparedStatement statement = dbConnection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet set = statement.executeQuery();
-			if (set.next())
-			{
+			if (set.next()) {
 				return mapResultSetToClient(set);
 			}
-		}
-		catch (SQLException e)
-		{
-			
-		}
-		finally
-		{
+		} catch (SQLException e) {
+
+		} finally {
 			ConnectionFactory.closeConnection(dbConnection);
 		}
-		
+
 		return null;
 	}
 }
