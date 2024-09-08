@@ -49,6 +49,6 @@ CREATE TABLE IF NOT EXISTS booking (
     number_guests INT NOT NULL,
     discount DECIMAL(5, 2),
     total_price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (chalet_id) REFERENCES chalet(chalet_id),
-    FOREIGN KEY (client_id) REFERENCES client(client_id)
+    FOREIGN KEY (chalet_id) REFERENCES chalet(chalet_id) ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES client(client_id) ON DELETE CASCADE
 );
